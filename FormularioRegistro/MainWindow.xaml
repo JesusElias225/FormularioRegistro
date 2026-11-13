@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="FormularioRegistro.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:FormularioRegistro"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    
+    <Grid Padding="32" ColumnSpacing="24" RowSpacing="24" RequestedTheme="Light">
+
+        <!-- Fondo degradado: durazno, lila y azul cielo -->
+        <Grid.Background>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFE9DF" Offset="0"/>
+                <GradientStop Color="#F3E8FF" Offset="0.5"/>
+                <GradientStop Color="#E3F0FF" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ENCABEZADO -->
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Spacing="16">
+            <Border Width="52" Height="52" CornerRadius="26"
+                    Background="{ThemeResource AccentFillColorDefaultBrush}">
+                <FontIcon Glyph="&#xE77B;" FontSize="24"
+                          Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
+            </Border>
+            <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="Registro de alumnos" Style="{StaticResource TitleTextBlockStyle}"/>
+                <TextBlock Text="Captura los datos del alumno y guárdalos en la lista"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- TARJETA DEL FORMULARIO -->
+        <Border Grid.Row="1" Grid.Column="0" VerticalAlignment="Top"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1" CornerRadius="8" Padding="24">
+            <StackPanel Spacing="16">
+
+                <TextBlock Text="Datos del alumno" Style="{StaticResource SubtitleTextBlockStyle}"/>
+
+                <TextBox x:Name="txtNombre" Header="Nombre completo" PlaceholderText="Ej. Juan Pérez"/>
+                <TextBox x:Name="txtMatricula" Header="Matrícula" PlaceholderText="Ej. 2026001"/>
+                <TextBox x:Name="txtCorreo" Header="Correo electrónico" PlaceholderText="Ej. juan@correo.com"/>
+
+                <ComboBox x:Name="cmbCarrera" Header="Carrera" PlaceholderText="Selecciona una carrera"
+                          HorizontalAlignment="Stretch">
+                    <x:String>Ingeniería en Sistemas</x:String>
+                    <x:String>Analisis de Datos</x:String>
+                    <x:String>Bases de Datos</x:String>
+                    <x:String>Administrador de Sistemas</x:String>
+                    <x:String>Ciberseguridad y Software</x:String>
+                    <x:String>Programacion</x:String>
+                </ComboBox>
+
+                <!-- Mensaje de exito o error -->
+                <InfoBar x:Name="infoMensaje" IsOpen="False" IsClosable="True"/>
+
+                <!-- Botones -->
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button x:Name="btnGuardar" Grid.Column="0" HorizontalAlignment="Stretch"
+                            Style="{StaticResource AccentButtonStyle}" Click="btnGuardar_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE74E;" FontSize="16"/>
+                            <TextBlock Text="Guardar"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="btnLimpiar" Grid.Column="1" HorizontalAlignment="Stretch"
+                            Click="btnLimpiar_Click">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon Glyph="&#xE894;" FontSize="16"/>
+                            <TextBlock Text="Limpiar"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+            </StackPanel>
+        </Border>
+
+        <!-- TARJETA DE LA LISTA -->
+        <Border Grid.Row="1" Grid.Column="1"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1" CornerRadius="8" Padding="24">
+            <Grid RowSpacing="12">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Titulo de la lista y contador -->
+                <Grid Grid.Row="0">
+                    <TextBlock Text="Alumnos registrados" Style="{StaticResource SubtitleTextBlockStyle}"/>
+                    <Border HorizontalAlignment="Right" VerticalAlignment="Center"
+                            CornerRadius="12" Padding="12,4"
+                            Background="{ThemeResource SubtleFillColorSecondaryBrush}">
+                        <TextBlock x:Name="lblTotal" Text="0 alumnos" FontWeight="SemiBold"/>
+                    </Border>
+                </Grid>
+
+                <!-- Lista con diseño personalizado para cada alumno -->
+                <ListView x:Name="lstAlumnos" Grid.Row="1" SelectionMode="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Alumno">
+                            <Grid Padding="0,10" ColumnSpacing="14">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Circulo con la inicial -->
+                                <Border Width="42" Height="42" CornerRadius="21"
+                                        Background="{ThemeResource AccentFillColorDefaultBrush}">
+                                    <TextBlock Text="{x:Bind Inicial}" FontSize="18" FontWeight="Bold"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               Foreground="{ThemeResource TextOnAccentFillColorPrimaryBrush}"/>
+                                </Border>
+
+                                <!-- Datos del alumno -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                                    <TextBlock Text="{x:Bind Nombre}" FontWeight="SemiBold" FontSize="15"/>
+                                    <TextBlock Text="{x:Bind Detalle}" FontSize="13"
+                                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                               TextWrapping="Wrap"/>
+                                    <TextBlock Text="{x:Bind Correo}" FontSize="13"
+                                               Foreground="{ThemeResource TextFillColorTertiaryBrush}"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>

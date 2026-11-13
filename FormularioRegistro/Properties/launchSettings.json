@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FormularioRegistro (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "FormularioRegistro (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
